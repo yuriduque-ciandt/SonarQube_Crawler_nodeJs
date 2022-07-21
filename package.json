@@ -1,0 +1,29 @@
+{
+  "name": "sonarqube_crawler_nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuriDuque/SonarQube_Crawler_nodeJs.git"
+  },
+  "author": "yuri-duque",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuriDuque/SonarQube_Crawler_nodeJs/issues"
+  },
+  "homepage": "https://github.com/yuriDuque/SonarQube_Crawler_nodeJs#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
