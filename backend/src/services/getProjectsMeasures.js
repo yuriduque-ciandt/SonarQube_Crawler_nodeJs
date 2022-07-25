@@ -3,32 +3,36 @@ import getMetrics from "./getMetrics.js";
 
 const getProjectsMeasures = async () => {
   const components = await sonarApi.listComponents();
-  const componentKey = components.map(({ key }) => key);
+  const componentKeys = components.map(({ key }) => key);
 
   const metrics = await getMetrics();
 
   const data = await Promise.all(
-    componentKey.map(async (key) => {
-      return await getProjectMeasures(key, metrics);
+    componentKeys.map(async (componentKey) => {
+      return await _getProjectMeasures(componentKey, metrics);
     })
   );
 
   return data;
 };
 
-const getProjectMeasures = async (key, metrics) => {
-  let measures = await sonarApi.getProjectMeasures(key);
-  measures = measures.map((measure) => {
-    const metricData = metrics.find(({ key }) => measure.metric === key);
-    return {
-      ...metricData,
-      value: measure.value,
-      bestValue: measure.bestValue,
-    };
-  });
+const _getProjectMeasures = async (componentKey, metrics) => {
+  let measures = await sonarApi.getProjectMeasures(componentKey);
+
+  measures = await Promise.all(
+    measures.map(async (measure) => {
+      const metricData = metrics.find(({ key }) => measure.metric === key);
+
+      return {
+        ...metricData,
+        value: measure.value,
+        bestValue: measure.bestValue,
+      };
+    })
+  );
 
   return {
-    key,
+    key: componentKey,
     measures,
   };
 };
