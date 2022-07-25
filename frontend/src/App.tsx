@@ -1,10 +1,19 @@
 import React from 'react';
 
+import './app.css';
+import Theme from './theme';
+import SonarReposProvider from './context/SonarReposContext';
+import Header from './components/Header';
+import Home from './pages/Home';
+
 function App() {
   return (
-    <div>
-      <h1>Hello world !!!!</h1>
-    </div>
+    <Theme>
+      <SonarReposProvider>
+        <Header />
+        <Home />
+      </SonarReposProvider>
+    </Theme>
   );
 }
 
