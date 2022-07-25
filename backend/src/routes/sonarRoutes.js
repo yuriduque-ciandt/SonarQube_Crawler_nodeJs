@@ -1,5 +1,6 @@
 import express from "express";
 import sonarApi from "../apis/sonarApi.js";
+import getProjectsMeasures from "../services/getProjectsMeasures.js";
 
 const router = express.Router();
 
@@ -16,19 +17,8 @@ router.get("/listComponents", async (req, res) => {
 
 router.get("/getProjectsMeasures", async (req, res) => {
   try {
-    const components = await sonarApi.listComponents();
-    const componentKey = components.map(({ key }) => key);
+    const data = await getProjectsMeasures();
 
-    const data = await Promise.all(
-      componentKey.map(async (key) => {
-        const measures = await sonarApi.getProjectMeasures(key);
-
-        return {
-          key,
-          measures,
-        };
-      })
-    );
     res.status(200).send(data);
   } catch (error) {
     console.log(error.message);
@@ -39,6 +29,7 @@ router.get("/getProjectsMeasures", async (req, res) => {
 router.get("/getProjectMeasureHistory", async (req, res) => {
   try {
     const { projecKey, metricKey } = req.query;
+
     const measures = await sonarApi.getProjectMeasureHistory(
       projecKey,
       metricKey
