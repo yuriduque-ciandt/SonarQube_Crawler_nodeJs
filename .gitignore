@@ -35,11 +35,14 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
+/build
 build/Release
 
 # Dependency directories
 node_modules/
 jspm_packages/
+/.pnp
+.pnp.js
 
 # TypeScript v1 declaration files
 typings/
@@ -109,7 +112,8 @@ package-lock.json
 
 # misc
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
-.env.production.Local
+.env.production.local
