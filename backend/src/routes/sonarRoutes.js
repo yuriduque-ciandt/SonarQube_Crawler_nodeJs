@@ -9,21 +9,19 @@ router.get("/listComponents", async (req, res) => {
 
     res.status(200).send(components);
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     res.status(400).send(error.message);
   }
 });
 
-router.get("/getProjectMeasures", async (req, res) => {
+router.get("/getProjectsMeasures", async (req, res) => {
   try {
-    const { pageSize } = req.body;
-
     const components = await sonarApi.listComponents();
     const componentKey = components.map(({ key }) => key);
 
     const data = await Promise.all(
       componentKey.map(async (key) => {
-        const measures = await sonarApi.getProjectMeasureHistory(key, pageSize);
+        const measures = await sonarApi.getProjectMeasures(key);
 
         return {
           key,
@@ -33,7 +31,22 @@ router.get("/getProjectMeasures", async (req, res) => {
     );
     res.status(200).send(data);
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
+    res.status(400).send(error.message);
+  }
+});
+
+router.get("/getProjectMeasureHistory", async (req, res) => {
+  try {
+    const { projecKey, metricKey } = req.query;
+    const measures = await sonarApi.getProjectMeasureHistory(
+      projecKey,
+      metricKey
+    );
+
+    res.status(200).send({ projecKey, measures });
+  } catch (error) {
+    console.log(error.message);
     res.status(400).send(error.message);
   }
 });

@@ -8,7 +8,7 @@ class Database {
     const database = mongoose.connection;
 
     database.on("error", (error) => {
-      console.log(error);
+      console.log(error.message);
     });
 
     database.once("connected", () => {

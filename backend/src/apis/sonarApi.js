@@ -13,7 +13,7 @@ const listComponents = async () => {
 
     return response.data.components;
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 
@@ -31,25 +31,27 @@ const getProjectMeasures = async (key) => {
     const component = response.data.component;
     return component.measures;
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 
-const getProjectMeasureHistory = async (key, ps = 1000) => {
-  const metricKeys = process.env.SONAR_METRICS;
-
+const getProjectMeasureHistory = async (
+  key,
+  metrics = process.env.SONAR_METRICS,
+  ps = 1000
+) => {
   try {
     const response = await axios.get(`/measures/search_history`, {
       params: {
         component: key,
-        metrics: metricKeys,
+        metrics,
         ps,
       },
     });
 
     return response.data.measures;
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 
