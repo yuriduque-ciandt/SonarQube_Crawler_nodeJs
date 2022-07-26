@@ -7,4 +7,5 @@ export interface RepoMeasure {
   metric: string;
   value: string;
   bestValue: boolean;
+  isPercentage?: boolean;
 }

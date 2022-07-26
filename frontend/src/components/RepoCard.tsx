@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
+import { FaArrowAltCircleDown, FaArrowAltCircleUp, FaMinusCircle } from 'react-icons/fa';
 
 import Chart from './Chart';
 
@@ -14,23 +15,19 @@ const RepoCard: React.FC<ComponentProps> = ({ repo }) => {
 
   const formatLabel = (label: string) => label.split('_').join(' ');
 
-  const formatMeasure = (measure: RepoMeasure) => {
-    switch (measure.metric) {
-      case 'coverage':
-      case 'duplicated_lines_density':
-      case 'security_hotspots_reviewed':
-        return (
-          <MetricLabel>
-            {formatLabel(measure.metric)}: <b>{measure.value}%</b>
-          </MetricLabel>
-        );
-      default:
-        return (
-          <MetricLabel>
-            {formatLabel(measure.metric)}: <b>{measure.value}</b>
-          </MetricLabel>
-        );
+  repo.measures.forEach((m) => {
+    m.isPercentage = [
+      'coverage',
+      'duplicated_lines_density',
+      'security_hotspots_reviewed'
+    ].includes(m.metric);
+  });
+
+  const getQualityDirection = (measure: RepoMeasure) => {
+    if (measure.bestValue) {
+      return <FaArrowAltCircleUp size={24} color="green" />;
     }
+    return <FaArrowAltCircleDown size={24} color="red" />;
   };
 
   return (
@@ -49,9 +46,17 @@ const RepoCard: React.FC<ComponentProps> = ({ repo }) => {
                   ? setSelectedMetric('')
                   : setSelectedMetric(measure.metric)
               }>
-              {formatMeasure(measure)}
+              <MetricStats>
+                <div>
+                  <b>
+                    {measure.value}
+                    {measure.isPercentage && '%'}
+                  </b>
+                  {getQualityDirection(measure)}
+                </div>
+                <p>{formatLabel(measure.metric)}</p>
+              </MetricStats>
             </MetricLink>
-            {measure.bestValue ? <Emoji rotate={45}>🙂</Emoji> : <Emoji rotate={310}>😐</Emoji>}
           </MetricContent>
         ))}
       </Row>
@@ -66,7 +71,7 @@ const RepoCard: React.FC<ComponentProps> = ({ repo }) => {
 };
 
 const Container = styled.div`
-  padding: 10px;
+  padding: 20px;
   background-color: white;
   margin-bottom: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -111,20 +116,23 @@ const MetricLink = styled.a<{ active: boolean }>`
     `}
 `;
 
-const MetricLabel = styled.p`
-  color: ${({ theme }) => theme.colors.text};
+const MetricStats = styled.div`
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   b {
     color: black;
     font-size: 18px;
+    margin-right: 10px;
   }
-  ::first-letter {
-    text-transform: capitalize;
+  p {
+    color: ${({ theme }) => theme.colors.text};
+    ::first-letter {
+      text-transform: capitalize;
+    }
   }
-`;
-
-const Emoji = styled.span<{ rotate: number }>`
-  margin-left: 10px;
-  filter: ${({ rotate }) => `hue-rotate(${rotate}deg)`};
 `;
 
 export default RepoCard;
