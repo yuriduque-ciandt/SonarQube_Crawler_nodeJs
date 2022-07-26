@@ -5,6 +5,10 @@ import getProjectsMeasures from "../services/getProjectsMeasures.js";
 const router = express.Router();
 
 router.get("/listComponents", async (req, res) => {
+  console.log(process.env.SONAR_KEY);
+  console.log(process.env.SONAR_METRICS);
+  console.log(process.env.SONAR_ORGANIZATION);
+  console.log(process.env.SONAR_URL);
   try {
     console.log("sonarRoutes - '/listComponents' - received");
 
