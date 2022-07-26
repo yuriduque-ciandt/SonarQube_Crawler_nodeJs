@@ -4,8 +4,25 @@ export interface ISonarRepo {
 }
 
 export interface RepoMeasure {
-  metric: string;
+  bestValue: false;
+  direction: number;
+  key: string;
+  name: string;
+  type: string;
   value: string;
-  bestValue: boolean;
-  isPercentage?: boolean;
+}
+
+export interface ISonarRepoHistory {
+  projecKey: string;
+  measures: MeasureWithHistory[];
+}
+
+export interface MeasureWithHistory {
+  metric: string;
+  history: History[];
+}
+
+export interface History {
+  date: string;
+  value: string;
 }

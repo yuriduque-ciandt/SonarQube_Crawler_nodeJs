@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { FaArrowAltCircleDown, FaArrowAltCircleUp, FaMinusCircle } from 'react-icons/fa';
+import { FaArrowAltCircleDown, FaArrowAltCircleUp } from 'react-icons/fa';
 
 import Chart from './Chart';
 
 import { ISonarRepo, RepoMeasure } from '../interfaces/ISonarRepo';
+import useMetricHistory from '../hooks/useMetricHistory';
+import useScroll from '../hooks/useScroll';
 
 type ComponentProps = {
   repo: ISonarRepo;
@@ -12,16 +14,17 @@ type ComponentProps = {
 
 const RepoCard: React.FC<ComponentProps> = ({ repo }) => {
   const [selectedMetric, setSelectedMetric] = useState('');
+  const { metricHistory, isLoading, error, getMetricHistory } = useMetricHistory();
+
+  useScroll(isLoading);
+
+  useEffect(() => {
+    if (selectedMetric) {
+      getMetricHistory(repo.key, selectedMetric);
+    }
+  }, [selectedMetric]);
 
   const formatLabel = (label: string) => label.split('_').join(' ');
-
-  repo.measures.forEach((m) => {
-    m.isPercentage = [
-      'coverage',
-      'duplicated_lines_density',
-      'security_hotspots_reviewed'
-    ].includes(m.metric);
-  });
 
   const getQualityDirection = (measure: RepoMeasure) => {
     if (measure.bestValue) {
@@ -37,24 +40,24 @@ const RepoCard: React.FC<ComponentProps> = ({ repo }) => {
       </Row>
       <Row>
         {repo.measures.map((measure) => (
-          <MetricContent key={measure.metric}>
+          <MetricContent key={measure.key}>
             <MetricLink
               href="#"
-              active={selectedMetric === measure.metric}
+              active={selectedMetric === measure.key}
               onClick={() =>
-                selectedMetric === measure.metric
+                selectedMetric === measure.key
                   ? setSelectedMetric('')
-                  : setSelectedMetric(measure.metric)
+                  : setSelectedMetric(measure.key)
               }>
               <MetricStats>
                 <div>
                   <b>
                     {measure.value}
-                    {measure.isPercentage && '%'}
+                    {measure.type === 'PERCENT' ? '%' : ''}
                   </b>
                   {getQualityDirection(measure)}
                 </div>
-                <p>{formatLabel(measure.metric)}</p>
+                <p>{measure.name}</p>
               </MetricStats>
             </MetricLink>
           </MetricContent>
@@ -62,8 +65,20 @@ const RepoCard: React.FC<ComponentProps> = ({ repo }) => {
       </Row>
       {selectedMetric && (
         <MetricGraphContent>
-          <Title>{formatLabel(selectedMetric)}</Title>
-          <Chart />
+          <Title>{formatLabel(selectedMetric)} History</Title>
+          {error && <p>Unable to retrieve metric history...</p>}
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <Chart
+              data={
+                metricHistory?.history.map((h) => ({
+                  name: new Date(h.date).toLocaleDateString(),
+                  value: h.value
+                })) as any[]
+              }
+            />
+          )}
         </MetricGraphContent>
       )}
     </Container>
@@ -135,4 +150,4 @@ const MetricStats = styled.div`
   }
 `;
 
-export default RepoCard;
+export default memo(RepoCard);

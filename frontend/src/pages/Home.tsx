@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { useSonarRepos } from '../context/SonarReposContext';
@@ -8,12 +8,16 @@ import Input from '../components/Input';
 import { FiSearch } from 'react-icons/fi';
 
 const Home = () => {
-  const { repoList, isLoading, error } = useSonarRepos();
+  const { repoList, isLoading, error, searchByName } = useSonarRepos();
   return (
     <Container>
       <HearderContent>
-        <Title>Repositories</Title>
-        <Input placeholder="Search repository" Icon={FiSearch} />
+        <Title>Repositories {!!repoList.length && `(${repoList.length})`}</Title>
+        <Input
+          placeholder="Search repository"
+          Icon={FiSearch}
+          onChange={(e) => searchByName(e.target.value)}
+        />
       </HearderContent>
       <Content>
         {isLoading && <p>Loading...</p>}
@@ -27,9 +31,7 @@ const Home = () => {
 };
 
 const Container = styled.div`
-  height: 100vh;
   padding: 20px 15% 20px 15%;
-  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const HearderContent = styled.div`
