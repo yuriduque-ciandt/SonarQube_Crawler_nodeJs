@@ -8,7 +8,18 @@ let app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-buildRoutes(app);
+router.get("/list", async (req, res) => {
+  try {
+    console.log("receive request");
+
+    res.status(200).send("success");
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).send(error.message);
+  }
+});
+
+// buildRoutes(app);
 
 app.listen(3000, () => {
   console.log("Application started on port 3000!");
