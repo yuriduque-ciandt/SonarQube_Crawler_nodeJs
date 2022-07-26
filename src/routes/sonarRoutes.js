@@ -29,7 +29,7 @@ router.get("/getProjectsMeasures", async (req, res) => {
 
     res.status(200).send(data);
   } catch (error) {
-    cconsole.log(
+    console.log(
       "sonarRoutes - '/getProjectsMeasures' - error: " + error.message
     );
     res.status(400).send(error.message);
