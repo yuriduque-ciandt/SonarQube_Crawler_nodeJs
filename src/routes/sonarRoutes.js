@@ -4,6 +4,17 @@ import getProjectsMeasures from "../services/getProjectsMeasures.js";
 
 const router = express.Router();
 
+router.get("/list", async (req, res) => {
+  try {
+    console.log("receive request");
+
+    res.status(200).send("success");
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).send(error.message);
+  }
+});
+
 router.get("/listComponents", async (req, res) => {
   try {
     const components = await sonarApi.listComponents();
