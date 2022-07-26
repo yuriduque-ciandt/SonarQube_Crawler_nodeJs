@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import Chart from './Chart';
 
@@ -12,42 +12,22 @@ type ComponentProps = {
 const RepoCard: React.FC<ComponentProps> = ({ repo }) => {
   const [selectedMetric, setSelectedMetric] = useState('');
 
+  const formatLabel = (label: string) => label.split('_').join(' ');
+
   const formatMeasure = (measure: RepoMeasure) => {
     switch (measure.metric) {
       case 'coverage':
-        return (
-          <MetricLabel>
-            Coverage: <b>{measure.value}</b>%
-          </MetricLabel>
-        );
-      case 'bugs':
-        return (
-          <MetricLabel>
-            Bugs: <b>{measure.value}</b>
-          </MetricLabel>
-        );
-      case 'code_smells':
-        return (
-          <MetricLabel>
-            Code Smells: <b>{measure.value}</b>
-          </MetricLabel>
-        );
       case 'duplicated_lines_density':
-        return (
-          <MetricLabel>
-            Duplicated lines density: <b>{measure.value}</b>%
-          </MetricLabel>
-        );
       case 'security_hotspots_reviewed':
         return (
           <MetricLabel>
-            Hotspots Reviewed: <b>{measure.value}</b>%
+            {formatLabel(measure.metric)}: <b>{measure.value}%</b>
           </MetricLabel>
         );
       default:
         return (
           <MetricLabel>
-            {measure.metric}: <b>{measure.value}</b>%
+            {formatLabel(measure.metric)}: <b>{measure.value}</b>
           </MetricLabel>
         );
     }
@@ -61,24 +41,23 @@ const RepoCard: React.FC<ComponentProps> = ({ repo }) => {
       <Row>
         {repo.measures.map((measure) => (
           <MetricContent key={measure.metric}>
-            <a
+            <MetricLink
               href="#"
+              active={selectedMetric === measure.metric}
               onClick={() =>
                 selectedMetric === measure.metric
                   ? setSelectedMetric('')
                   : setSelectedMetric(measure.metric)
               }>
               {formatMeasure(measure)}
-            </a>
+            </MetricLink>
             {measure.bestValue ? <Emoji rotate={45}>🙂</Emoji> : <Emoji rotate={310}>😐</Emoji>}
           </MetricContent>
         ))}
       </Row>
       {selectedMetric && (
         <MetricGraphContent>
-          <div>
-            <p>{selectedMetric}</p>
-          </div>
+          <Title>{formatLabel(selectedMetric)}</Title>
           <Chart />
         </MetricGraphContent>
       )}
@@ -90,6 +69,8 @@ const Container = styled.div`
   padding: 10px;
   background-color: white;
   margin-bottom: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
 `;
 
 const Row = styled.div`
@@ -102,6 +83,9 @@ const Title = styled.p`
   font-size: 24px;
   margin-bottom: 10px;
   color: ${({ theme }) => theme.colors.text};
+  ::first-letter {
+    text-transform: capitalize;
+  }
 `;
 
 const MetricContent = styled.div`
@@ -111,8 +95,20 @@ const MetricContent = styled.div`
 `;
 
 const MetricGraphContent = styled.div`
-  transition: all 0.3s ease-in-out;
-  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+`;
+
+const MetricLink = styled.a<{ active: boolean }>`
+  text-decoration: none;
+  ${({ active }) =>
+    active &&
+    css`
+      border-bottom: 2px solid black;
+    `}
 `;
 
 const MetricLabel = styled.p`
@@ -120,6 +116,9 @@ const MetricLabel = styled.p`
   b {
     color: black;
     font-size: 18px;
+  }
+  ::first-letter {
+    text-transform: capitalize;
   }
 `;
 
