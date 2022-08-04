@@ -43,6 +43,7 @@ const getProjectMeasures = async (key) => {
 const getProjectMeasureHistory = async (
   key,
   metrics = process.env.SONAR_METRICS,
+  from = null,
   ps = 1000
 ) => {
   console.log("sonarApi - '/getProjectMeasureHistory' - received");
@@ -51,6 +52,7 @@ const getProjectMeasureHistory = async (
       component: key,
       metrics,
       ps,
+      from,
     },
   });
 
@@ -68,9 +70,20 @@ const getMetrics = async () => {
   return response.data.metrics;
 };
 
+const getProjectStatus = async (key) => {
+  console.log("sonarApi - '/getProjectStatus' - received");
+  const response = await axios.get(`/qualitygates/project_status`, {
+    params: { projectKey: key },
+  });
+
+  console.log("sonarApi - '/getMetrics' - done");
+  return response.data.projectStatus;
+};
+
 export default {
   listComponents,
   getProjectMeasures,
   getProjectMeasureHistory,
   getMetrics,
+  getProjectStatus,
 };

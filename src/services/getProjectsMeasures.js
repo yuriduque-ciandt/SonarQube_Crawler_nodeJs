@@ -9,7 +9,11 @@ const getProjectsMeasures = async () => {
 
   const data = await Promise.all(
     componentKeys.map(async (componentKey) => {
-      return await _getProjectMeasures(componentKey, metrics);
+      const project = await _getProjectMeasures(componentKey, metrics);
+      project.status = await sonarApi.getProjectStatus(componentKey);
+      project.history = await _getProjectHistory(componentKey);
+
+      return project;
     })
   );
 
@@ -34,6 +38,18 @@ const _getProjectMeasures = async (componentKey, metrics) => {
   return {
     key: componentKey,
     measures,
+  };
+};
+
+const _getProjectHistory = async (componentKey) => {
+  let history = await await sonarApi.getProjectMeasureHistory(
+    componentKey,
+    process.env.SONAR_METRICS
+  );
+
+  return {
+    key: componentKey,
+    history,
   };
 };
 
