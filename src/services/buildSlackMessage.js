@@ -1,3 +1,7 @@
+const successIcon = ":white_check_mark:";
+const errorIcon = ":x:";
+const noValueIcon = ":heavy_minus_sign:";
+
 function buildMessage(body) {
   let message = { blocks: [] };
 
@@ -80,10 +84,6 @@ function setDetails(body, message) {
 }
 
 function setConditions(body, message) {
-  const successIcon = ":white_check_mark:";
-  const errorIcon = ":x:";
-  const noValueIcon = ":heavy_minus_sign:";
-
   let conditions = {
     type: "section",
     fields: [],
