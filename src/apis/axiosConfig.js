@@ -14,4 +14,4 @@ const slackInstance = axios.create({
   },
 });
 
-export default { instance, slackInstance };
+export default { sonarInstance, slackInstance };

@@ -1,5 +1,5 @@
 import express from "express";
-import slackApi from "../apis/slackApi";
+import slackApi from "../apis/slackApi.js";
 
 const router = express.Router();
 
