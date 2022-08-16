@@ -15,7 +15,9 @@ function setMessageHeader(body, message) {
     type: "header",
     text: {
       type: "plain_text",
-      text: `${body.project.name}: :x:`,
+      text: `${body.project.name}: ${
+        body.status == "SUCCESS" ? successIcon : errorIcon
+      }`,
       emoji: true,
     },
   };
