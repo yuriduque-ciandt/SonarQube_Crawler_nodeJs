@@ -30,7 +30,9 @@ function setMessageHeader(body, message) {
     elements: [
       {
         type: "mrkdwn",
-        text: `The analysis for project '${body.project.name}' failed`,
+        text: `The analysis for project '${body.project.name}' ${
+          body.status == "SUCCESS" ? "success" : "failed"
+        }`,
       },
     ],
   };
