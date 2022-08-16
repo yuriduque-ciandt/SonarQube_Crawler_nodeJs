@@ -44,7 +44,7 @@ function setMessageHeader(body, message) {
 }
 
 function setDetails(body, message) {
-  if (body.branch && body.branch.type == "LONG") {
+  if (body.branch.type == "LONG") {
     message = setBranchDetails(body, message);
   } else {
     message = setPullRequestDerails(body, message);
