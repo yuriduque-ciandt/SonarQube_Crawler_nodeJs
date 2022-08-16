@@ -101,7 +101,7 @@ function setBranchDetails(body, message) {
       },
       {
         type: "mrkdwn",
-        text: `*Branch:*\n<${branchUrl}|Pull request link>`,
+        text: `*Branch:*\n<${branchUrl}|Branch link>`,
       },
     ],
   };
