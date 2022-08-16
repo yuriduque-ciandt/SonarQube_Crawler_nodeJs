@@ -71,7 +71,6 @@ function setDetails(body, message) {
 }
 
 function setPullRequestDerails(body, message) {
-  const branchName = body.branch.name;
   const prNumber = body.branch.name.replace("PR-", "");
   const pullRequestUrl = `${process.env.GITHUB_URL}/${body.project.name}/pull/${prNumber}`;
 
