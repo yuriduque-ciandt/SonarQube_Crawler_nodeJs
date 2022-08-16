@@ -20,7 +20,7 @@ function setMessageHeader(body, message) {
     text: {
       type: "plain_text",
       text: `${body.project.name}: ${
-        body.qualityGate.status == "SUCCESS" ? successIcon : errorIcon
+        body.qualityGate.status == "OK" ? successIcon : errorIcon
       }`,
       emoji: true,
     },
@@ -31,7 +31,7 @@ function setMessageHeader(body, message) {
       {
         type: "mrkdwn",
         text: `The analysis for project '${body.project.name}' ${
-          body.qualityGate.status == "SUCCESS" ? "success" : "failed"
+          body.qualityGate.status == "OK" ? "successed" : "failed"
         }`,
       },
     ],
