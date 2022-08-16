@@ -8,9 +8,9 @@ const sonarInstance = axios.create({
 });
 
 const slackInstance = axios.create({
-  baseURL: process.env.SONAR_URL,
+  baseURL: process.env.SLACK_URL,
   headers: {
-    Authorization: `Bearer ${process.env.SONAR_KEY}`,
+    ContentType: "application/json",
   },
 });
 

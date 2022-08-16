@@ -1,0 +1,74 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "[project-name]: :x:",
+        "emoji": true
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "the analysis for project '[project-name]' failed"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Analysis:*\n[branch-url]|Analysis link>"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Pull Request:*\n<https://github.com/ab-inbev-global-martech/Tapit-BE-USA-Custom/pull/[pullrequest-number]|Pull request link>"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*When:*\n[analysis-date]"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Quality gate name:*\n[quality-gate-name]"
+        }
+      ]
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*[condition-name] [icon]:*\noperator: [operator]\nexpected:[errorThreshold]\nactual:[value] \n"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*[condition-name] [icon]:*\noperator: [operator]\nexpected:[errorThreshold]\nactual:[value] \n"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*[condition-name] :x::*\noperator: [operator]\nexpected:[errorThreshold]\nactual:[value] \n "
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*[condition-name] :white_check_mark::*\noperator: [operator]\nexpected:[errorThreshold]\nactual:[value] \n "
+        }
+      ]
+    }
+  ]
+}

@@ -5,7 +5,7 @@ const listComponents = async () => {
   const organization = process.env.SONAR_ORGANIZATION;
 
   try {
-    const response = await axios.get("/components/search", {
+    const response = await axios.sonarInstance.get("/components/search", {
       params: {
         organization,
         ps: 200,
@@ -24,7 +24,7 @@ const getProjectMeasures = async (key) => {
   const metricKeys = process.env.SONAR_METRICS;
 
   try {
-    const response = await axios.get(`/measures/component`, {
+    const response = await axios.sonarInstance.get(`/measures/component`, {
       params: {
         component: key,
         metricKeys,
@@ -46,7 +46,7 @@ const getProjectMeasureHistory = async (
   ps = 1000
 ) => {
   console.log("sonarApi - '/getProjectMeasureHistory' - received");
-  const response = await axios.get(`/measures/search_history`, {
+  const response = await axios.sonarInstance.get(`/measures/search_history`, {
     params: {
       component: key,
       metrics,
@@ -60,7 +60,7 @@ const getProjectMeasureHistory = async (
 
 const getMetrics = async () => {
   console.log("sonarApi - '/getMetrics' - received");
-  const response = await axios.get(`/metrics/search`, {
+  const response = await axios.sonarInstance.get(`/metrics/search`, {
     params: { ps: 200 },
   });
 
