@@ -1,6 +1,6 @@
-const successIcon = ":white_check_mark:";
-const errorIcon = ":x:";
-const noValueIcon = ":heavy_minus_sign:";
+const successIcon = process.env.SLACK_ICON_SUCCESS;
+const errorIcon = process.env.SLACK_ICON_ERROR;
+const noValueIcon = process.env.SLACK_ICON_NO_VALUE;
 
 function buildMessage(body) {
   let message = { blocks: [] };
@@ -42,25 +42,10 @@ function setMessageHeader(body, message) {
 }
 
 function setDetails(body, message) {
-  const test = "";
-  test.includes();
-  if (body.branch && body.branch.name.includes("PR")) {
-    const prNumber = body.branch.name.replace("PR-", "");
-    const section1 = {
-      type: "section",
-      fields: [
-        {
-          type: "mrkdwn",
-          text: `*Analysis:*\n<${body.branch.url}|Analysis link>`,
-        },
-        {
-          type: "mrkdwn",
-          text: `*Pull Request:*\n<https://github.com/ab-inbev-global-martech/Tapit-BE-USA-Custom/pull/${prNumber}|Pull request link>`,
-        },
-      ],
-    };
-
-    message.blocks.push(section1);
+  if (body.branch && body.branch.type == "SHORT") {
+    message = setPullRequestDerails(body, message);
+  } else {
+    message = setBranchDetails(body, message);
   }
 
   const date = body.analysedAt.split("+")[0];
@@ -80,6 +65,47 @@ function setDetails(body, message) {
 
   message.blocks.push(section2);
   message = setDiver(message);
+  return message;
+}
+
+function setPullRequestDerails(body, message) {
+  const prNumber = body.branch.name.replace("PR-", "");
+  const pullRequestUrl = `${process.env.GITHUB_URL}/${body.project.name}/pull/${prNumber}`;
+
+  const section1 = {
+    type: "section",
+    fields: [
+      {
+        type: "mrkdwn",
+        text: `*Analysis:*\n<${body.branch.url}|Analysis link>`,
+      },
+      {
+        type: "mrkdwn",
+        text: `*Pull Request:*\n<${pullRequestUrl}|Pull request link>`,
+      },
+    ],
+  };
+
+  message.blocks.push(section1);
+  return message;
+}
+
+function setBranchDetails(body, message) {
+  const branchUrl = `${process.env.GITHUB_URL}/${body.project.name}/tree/${body.branch.name}`;
+  const section1 = {
+    type: "section",
+    fields: [
+      {
+        type: "mrkdwn",
+        text: `*Analysis:*\n<${body.branch.url}|Analysis link>`,
+      },
+      {
+        type: "mrkdwn",
+        text: `*Branch:*\n<${branchUrl}|Pull request link>`,
+      },
+    ],
+  };
+  message.blocks.push(section1);
   return message;
 }
 
