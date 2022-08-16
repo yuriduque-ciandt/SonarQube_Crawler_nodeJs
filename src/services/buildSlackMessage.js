@@ -44,10 +44,10 @@ function setMessageHeader(body, message) {
 }
 
 function setDetails(body, message) {
-  if (body.branch && body.branch.type == "SHORT") {
-    message = setPullRequestDerails(body, message);
-  } else {
+  if (body.branch && body.branch.type == "LONG") {
     message = setBranchDetails(body, message);
+  } else {
+    message = setPullRequestDerails(body, message);
   }
 
   const date = body.analysedAt.split("+")[0];
@@ -71,6 +71,7 @@ function setDetails(body, message) {
 }
 
 function setPullRequestDerails(body, message) {
+  const branchName = body.branch.name;
   const prNumber = body.branch.name.replace("PR-", "");
   const pullRequestUrl = `${process.env.GITHUB_URL}/${body.project.name}/pull/${prNumber}`;
 
