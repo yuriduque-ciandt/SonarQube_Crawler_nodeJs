@@ -83,7 +83,7 @@ function setPullRequestDerails(body, message) {
       },
       {
         type: "mrkdwn",
-        text: `*Pull Request:*\n<${pullRequestUrl}|Pull request link>`,
+        text: `*Pull Request:*\n<${pullRequestUrl}|${body.branch.name}>`,
       },
     ],
   };
@@ -103,7 +103,7 @@ function setBranchDetails(body, message) {
       },
       {
         type: "mrkdwn",
-        text: `*Branch:*\n<${branchUrl}|Branch link>`,
+        text: `*Branch:*\n<${branchUrl}|${body.branch.name}>`,
       },
     ],
   };
